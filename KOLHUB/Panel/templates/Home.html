@@ -1,0 +1,117 @@
+{% load static %}
+<html lang="en">
+<head>
+    <title>Panel</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+</head>
+<body class="bg-dark">
+
+    <nav class="navbar navbar-expand-sm bg-light navbar-light mb-5">
+        <a href="#" class='h5 text-dark ml-2 mr-5 border p-2' title="User Name" data-toggle="popover" data-trigger="hover" data-content="{{ user }}">{{ user }}</a>
+        
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item" id='Home'>
+              <a class="nav-link" href="#">Home</a>
+            </li>
+            <li class="nav-item" id='Setting'>
+                <a class="nav-link" href="#">Setting</a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link text-danger" href="/auth/logout">Logout</a>
+            </li>
+        </ul>
+
+        <script>
+          $(document).ready(function(){
+            $('[data-toggle="popover"]').popover();  
+            $(`#{{ active }}`).attr('class', 'nav-item active'); 
+          });
+        </script>
+    </nav>
+    
+    <div class="container-fluid" style='margin-top:10%'>
+
+      <!-- Create page part -->
+      <div class="row w-100">
+        <div class="col-md-12 w-100">
+          <button class="btn btn-secondary w-100" data-toggle="collapse" data-target="#coll_id">Create New Page</button>
+
+          <div id="coll_id" class="collapse collapse-horizontal mt-3">
+              <div class="card card-body bg-dark border-light">
+                
+                <!-- Code part -->
+                <button class="btn btn-light border-dark" data-toggle="collapse" data-target="#coll_code_id">Write Code</button>
+                <div id="coll_code_id" class="collapse collapse-horizontal mt-3">
+                    <div class="card card-body bg-dark border-light">
+                      <form action="code_to_page" method="post">
+                        {% csrf_token %}
+                        {% for item in code_form %}
+                            <div class="form-group">
+                                <label class="mb-1 text-light">{{ item.label_tag }}</label>
+                                {{ item }}
+                            </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <button type="submit" class="form-control btn btn-success submit px-3">Create</button>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+                
+                
+                <!-- File part -->
+                <button class="btn btn-light mt-2 border-dark" data-toggle="collapse" data-target="#coll_file_id">Upload File</button>
+                <div id="coll_file_id" class="collapse collapse-horizontal mt-3">
+                    <div class="card card-body bg-dark border-light">
+                      <form action="html_file_to_page" method="post" enctype="multipart/form-data">
+                        {% csrf_token %}
+                        {% for item in upload_form %}
+                            <div class="form-group">
+                                {{ item }}
+                            </div>
+                        {% endfor %}
+                        <div class="form-group">
+                            <button type="submit" class="form-control btn btn-success submit px-3">Create</button>
+                        </div>
+                      </form>
+                    </div>
+                </div>
+
+              </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Show and Delete Pages part -->
+      <div class="row w-100 mt-3">
+        <div class="col-md-12 w-100">
+          <button class="btn btn-secondary w-100" data-toggle="collapse" data-target="#coll_mypages">My Pages</button>
+
+          <div id="coll_mypages" class="collapse mt-3">
+              <div class="card card-body bg-dark border-light">
+
+                <ul class="list-group">
+                  {% for page in pages %}
+                  
+                    <a href="pages/xx/{{ page.user }}/{{ page.id }}" class="list-group-item list-group-item-action text-primary">/pages/xx/{{ page.user }}/{{ page.id }}</a>
+                    <a href="del_page/{{ page.user }}/{{ page.id }}" class="btn btn-danger text-light mb-3">Delete</a>
+                  
+                  {% endfor %}
+                </ul>
+              </div>
+          </div>
+
+        </div>
+      </div>
+
+      
+    </div>
+
+</body>
+</html>

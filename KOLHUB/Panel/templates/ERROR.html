@@ -1,0 +1,39 @@
+{% load static %}
+<html lang="en">
+<head>
+    <title>Panel</title>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+    <script src="{% static 'js/jquery.js' %}"></script>
+    <script src="{% static 'js/popper.js' %}"></script>
+    <script src="{% static 'js/bootstrap.bundle.js' %}"></script>
+</head>
+<body class="bg-dark">
+    
+    <div class="container-fluid">
+        <div class="jumbotron jumbotron-fluid">
+            <div class="container text-center">
+                <h1>{{ Text }} <span class="badge text-bg-secondary" id="time">{{ time }}</span></h1>
+            </div>
+          </div>
+    </div>
+
+    <script>
+        let count = {{ time }};
+    
+        const countdown = setInterval(() => {
+            count--;
+            $('#time').text(count);
+    
+            if (count === 0) {
+                const currentUrl = window.location.href;
+                const lastSlashIndex = currentUrl.lastIndexOf('/');
+                const newUrl = currentUrl.substring(0, lastSlashIndex + 1) + '\Panel';
+                window.location.href = newUrl;
+            }
+        }, 1000);
+    </script>
+
+</body>
+</html>
